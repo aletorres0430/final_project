@@ -6,8 +6,15 @@ col_alive = (255, 255, 215)
 col_background = (10, 10, 40)
 col_grid = (30, 30, 60)
 
+rulegrid = [[0, 0, 0],
+            [1, 0, 1],
+            [0, 0, 0]]
+
+rulegrid = np.array(rulegrid)
+
 def update(surface, cur, sz):
     nxt = np.zeros((cur.shape[0], cur.shape[1]))
+    i = 0 #remove this
 
     for r, c in np.ndindex(cur.shape):
         num_alive = np.sum(cur[r-1:r+2, c-1:c+2]) - cur[r, c]
@@ -20,6 +27,11 @@ def update(surface, cur, sz):
 
         col = col if cur[r, c] == 1 else col_background
         pygame.draw.rect(surface, col, (c*sz, r*sz, sz-1, sz-1))
+        i += 1
+        surroundings = np.array([])
+        surroundings = cur[r-1:r+1, c-1:c+1]
+        #if i < 10:
+            #print(surroundings)
 
     return nxt
 
@@ -53,7 +65,19 @@ def main(dimx, dimy, cellsize):
 
         surface.fill(col_grid)
         cells = update(surface, cells, cellsize)
+        square1 = pygame.draw.rect(surface,(255, 255, 255),(200,150,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(250,150,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(300,150,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(200,200,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(250,200,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(300,200,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(200,250,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(250,250,45,45))
+        pygame.draw.rect(surface,(255, 255, 255),(300,250,45,45))
         pygame.display.update()
+
+        if event.type == pygame.MOUSEBUTTONUP
+            square1 = pygame.draw.rect(surface,(0, 0, 0),(200,150,45,45))
 
 if __name__ == "__main__":
     main(120, 90, 8)
