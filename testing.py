@@ -57,3 +57,57 @@ class Game:
         pygame.time.set_timer(self.new_generation_event, int(1000/GENERATIONS_PER_SECOND))
 
         self.menu_font = pygame.font.SysFont(FONT, FONTSIZE)
+
+    def draw_grid(self):
+        for x in range(0, WIDTH, TILESIZE):
+            pygame.draw.line(self.screen, WHITE, (x, 0), (x, HEIGHT))
+        for y in range(0, HEIGHT, TILESIZE):
+            pygame.draw.line(self.screen, WHITE, (0, y), (WIDTH, y))
+
+    def draw(self):
+        self.all_sprites.draw(self.screen)
+        if self.show_grid:
+            self.draw_grid()
+        pygame.display.flip()
+    
+    def new(self):
+        self.gridwidth = int(WIDTH / TILESIZE)
+        self.gridheight = int(HEIGHT / TILESIZE)
+        self.pause = True
+        self.show_grid = True
+        self.colors = WHITE
+        self.gps = GENERATIONS_PER_SECOND
+        self.all_sprites = pygame.sprite.Group()
+        self.cells = []
+        for x in range(self.gridwidth):
+            self.cells.append([])
+            for y in range(self.gridheight):
+                self.cells[x].append(Cell(self, x, y))
+        self.previous_click, self.previous_x, self.previous_y = None, None, None
+
+    def run(self):
+        while True:
+            self.clock.tick(FPS)
+            self.events()
+            self.draw()
+
+    def quit(self):
+        pygame.quit()
+        sys.exit()
+
+    # start writing rules here
+    #def next_generation(self)
+
+    def events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
+                    self.quit()
+            
+
+
+
+g = Game()
+while True:
+    g.new()
+    g.run()
