@@ -6,8 +6,7 @@ WIDTH = 1000
 HEIGHT = 750
 FPS = 60
 TITLE = "Game of Life"
-TILESIZES = cycle([8, 16, 32, 64])
-TILESIZE = next(TILESIZES)
+TILESIZE = 12
 GENERATIONS_PER_SECOND = 10
 RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
 
@@ -96,6 +95,8 @@ class Game:
 
     def events(self):
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
                     self.quit()
