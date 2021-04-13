@@ -1,12 +1,11 @@
 from itertools import cycle
-from random import random
 
 import pygame
 
 WIDTH = 1000
 HEIGHT = 750
 FPS = 60
-TITLE = "Conway's Game of Life"
+TITLE = "Game of Life"
 TILESIZES = cycle([8, 16, 32, 64])
 TILESIZE = next(TILESIZES)
 GENERATIONS_PER_SECOND = 10
@@ -48,15 +47,12 @@ class Cell(pygame.sprite.Sprite):
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.font.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(TITLE)
         self.clock = pygame.time.Clock()
         pygame.key.set_repeat(500, 100)
-        self.new_generation_event = pygame.USEREVENT+1
-        pygame.time.set_timer(self.new_generation_event, int(1000/GENERATIONS_PER_SECOND))
-
-        self.menu_font = pygame.font.SysFont(FONT, FONTSIZE)
+        self.next_generation_event = pygame.USEREVENT+1
+        pygame.time.set_timer(self.next_generation_event, int(1000/GENERATIONS_PER_SECOND))
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
