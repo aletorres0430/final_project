@@ -10,8 +10,9 @@ TILESIZE = 12
 GENERATIONS_PER_SECOND = 10
 RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
 
+
 LEFT = 0
-RIGHT = 1
+RIGHT = 2
 
 FONTSIZE = 15
 FONT = 'arial'
@@ -107,7 +108,6 @@ class Game:
             y = int(y / TILESIZE)
 
             if (click, x, y) != (self.previous_click, self.previous_x, self.previous_y):
-                self.previous_click, self.previous_x, self.previous_y = click, x, y
                 if click[LEFT] and not self.cells[x][y].alive:
                     self.cells[x][y].on(self.color)
                 elif click[RIGHT] and self.cells[x][y].alive:
