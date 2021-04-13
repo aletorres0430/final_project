@@ -89,10 +89,14 @@ class Game:
 
     def quit(self):
         pygame.quit()
-        sys.exit()
 
-    # start writing rules here
-    #def next_generation(self)
+    #start writing rules here
+    def next_generation(self):
+        if self.color == WHITE:
+            self.color = BLACK
+        elif self.color == BLACK:
+            self.color = WHITE
+        
 
     def events(self):
         for event in pygame.event.get():
@@ -115,7 +119,6 @@ class Game:
             if event.type == self.next_generation_event and not self.pause:
                 self.next_generation()
             
-
 
 
 g = Game()
