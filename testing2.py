@@ -76,9 +76,5 @@ def main(dimx, dimy, cellsize):
         pygame.draw.rect(surface,(255, 255, 255),(300,250,45,45))
         pygame.display.update() 
 
-        if event.type == pygame.MOUSEBUTTONUP
-            square1 = pygame.draw.rect(surface,(0, 0, 0),(200,150,45,45))
-            #not working
-
 if __name__ == "__main__":
     main(120, 90, 8)
