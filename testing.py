@@ -11,7 +11,7 @@ GENERATIONS_PER_SECOND = 10
 RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
 
 LEFT = 0
-RIGHT = 2
+RIGHT = 1
 
 FONTSIZE = 15
 FONT = 'arial'
@@ -70,7 +70,7 @@ class Game:
         self.gridheight = int(HEIGHT / TILESIZE)
         self.pause = True
         self.show_grid = True
-        self.colors = WHITE
+        self.color = WHITE
         self.gps = GENERATIONS_PER_SECOND
         self.all_sprites = pygame.sprite.Group()
         self.cells = []
@@ -100,6 +100,20 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
                     self.quit()
+
+            click = pygame.mouse.get_pressed()
+            x, y = pygame.mouse.get_pos()
+            x = int(x / TILESIZE)
+            y = int(y / TILESIZE)
+
+            if (click, x, y) != (self.previous_click, self.previous_x, self.previous_y):
+                self.previous_click, self.previous_x, self.previous_y = click, x, y
+                if click[LEFT] and not self.cells[x][y].alive:
+                    self.cells[x][y].on(self.color)
+                elif click[RIGHT] and self.cells[x][y].alive:
+                    self.cells[x][y].off(BLACK)
+            if event.type == self.next_generation_event and not self.pause:
+                self.next_generation()
             
 
 
