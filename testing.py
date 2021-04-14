@@ -39,9 +39,9 @@ class Cell(pygame.sprite.Sprite):
         self.image.fill(color)
         self.color = color
 
-    def survive(self):
-        r, g, b = self.color
-        self.color = (r, g, b)
+    def survive(self, color=WHITE):
+        self.alive = True
+        self.color = WHITE
         self.image.fill(self.color)
 
 class Game:
@@ -92,10 +92,14 @@ class Game:
 
     #start writing rules here
     def next_generation(self):
-        if self.color == WHITE:
-            self.color = BLACK
-        elif self.color == BLACK:
-            self.color = WHITE
+        temp = []
+        for x in range(self.gridwidth):
+            temp.append([])
+            for y in range(self.gridheight):
+                if self.cells[x][y].alive:
+                    self.cells[x][y].off(BLACK)
+                else:
+                    self.cells[x][y].on(self.color)
         
 
     def events(self):
@@ -105,6 +109,8 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
                     self.quit()
+                if event.key == pygame.K_SPACE:
+                    self.pause = not(self.pause)
 
             click = pygame.mouse.get_pressed()
             x, y = pygame.mouse.get_pos()
