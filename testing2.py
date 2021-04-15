@@ -7,7 +7,7 @@ HEIGHT = 750
 FPS = 60
 TITLE = "Game of Life"
 TILESIZE = 12
-GENERATIONS_PER_SECOND = 10
+GENERATIONS_PER_SECOND = 1
 RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
 
 
@@ -101,9 +101,9 @@ class Game:
                                 num_alive += 1
                 if num_alive < 2:
                     killgrid.append([x, y])
-                elif num_alive < 4:
+                elif num_alive == 3:
                     livegrid.append([x, y])
-                else:
+                elif num_alive != 2:
                     killgrid.append([x, y])
         for kcoordinate in killgrid:
             self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
