@@ -1,80 +1,138 @@
+from itertools import cycle
+
 import pygame
-import numpy as np
 
-col_about_to_die = (200, 200, 225)
-col_alive = (255, 255, 215)
-col_background = (10, 10, 40)
-col_grid = (30, 30, 60)
+WIDTH = 1000
+HEIGHT = 750
+FPS = 60
+TITLE = "Game of Life"
+TILESIZE = 12
+GENERATIONS_PER_SECOND = 10
+RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
 
-rulegrid = [[0, 0, 0],
-            [1, 0, 1],
-            [0, 0, 0]]
 
-rulegrid = np.array(rulegrid)
+LEFT = 0
+RIGHT = 2
 
-def update(surface, cur, sz):
-    nxt = np.zeros((cur.shape[0], cur.shape[1]))
-    i = 0 #remove this
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
-    for r, c in np.ndindex(cur.shape):
-        num_alive = np.sum(cur[r-1:r+2, c-1:c+2]) - cur[r, c]
+class Cell(pygame.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image = pygame.Surface((TILESIZE, TILESIZE))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.off()
 
-        if cur[r, c] == 1 and num_alive < 2 or num_alive > 3:
-            col = col_about_to_die
-        elif (cur[r, c] == 1 and 2 <= num_alive <= 3) or (cur[r, c] == 0 and num_alive == 3):
-            nxt[r, c] = 1
-            col = col_alive
+    def off(self, color=BLACK):
+        self.alive = False
+        self.image.fill(color)
 
-        col = col if cur[r, c] == 1 else col_background
-        pygame.draw.rect(surface, col, (c*sz, r*sz, sz-1, sz-1))
-        i += 1
-        surroundings = np.array([])
-        surroundings = cur[r-1:r+1, c-1:c+1]
-        #if i < 10:
-            #print(surroundings)
+    def on(self, color=WHITE):
+        self.alive = True
+        self.image.fill(color)
+        self.color = color
 
-    return nxt
+    def survive(self, color=WHITE):
+        self.alive = True
+        self.color = WHITE
+        self.image.fill(self.color)
 
-def init(dimx, dimy):
-    cells = np.zeros((dimy, dimx))
-    pattern = np.array([[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
-                        [1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]);
-    pos = (3,3)
-    cells[pos[0]:pos[0]+pattern.shape[0], pos[1]:pos[1]+pattern.shape[1]] = pattern
-    return cells
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption(TITLE)
+        self.clock = pygame.time.Clock()
+        pygame.key.set_repeat(500, 100)
+        self.next_generation_event = pygame.USEREVENT+1
+        pygame.time.set_timer(self.next_generation_event, int(1000/GENERATIONS_PER_SECOND))
 
-def main(dimx, dimy, cellsize):
-    pygame.init()
-    surface = pygame.display.set_mode((dimx * cellsize, dimy * cellsize))
-    pygame.display.set_caption("John Conway's Game of Life")
+    def draw_grid(self):
+        for x in range(0, WIDTH, TILESIZE):
+            pygame.draw.line(self.screen, WHITE, (x, 0), (x, HEIGHT))
+        for y in range(0, HEIGHT, TILESIZE):
+            pygame.draw.line(self.screen, WHITE, (0, y), (WIDTH, y))
 
-    cells = init(dimx, dimy)
+    def draw(self):
+        self.all_sprites.draw(self.screen)
+        if self.show_grid:
+            self.draw_grid()
+        pygame.display.flip()
+    
+    def new(self):
+        self.gridwidth = int(WIDTH / TILESIZE)
+        self.gridheight = int(HEIGHT / TILESIZE)
+        self.pause = True
+        self.show_grid = True
+        self.color = WHITE
+        self.gps = GENERATIONS_PER_SECOND
+        self.all_sprites = pygame.sprite.Group()
+        self.cells = []
+        for x in range(self.gridwidth):
+            self.cells.append([])
+            for y in range(self.gridheight):
+                self.cells[x].append(Cell(self, x, y))
+        self.previous_click, self.previous_x, self.previous_y = None, None, None
 
-    while True:
+    def run(self):
+        while True:
+            self.clock.tick(FPS)
+            self.events()
+            self.draw()
+
+    def quit(self):
+        pygame.quit()
+
+    #start writing rules here
+    def next_generation(self):
+        temp = []
+        for x in range(self.gridwidth -1):
+            temp.append([])
+            for y in range(self.gridheight -1):
+                num_alive = 0
+                for h in range(x-1, x+2):
+                    for v in range(y-1, y+2):
+                        if (x,y) != (h,v):
+                            if self.cells[h][v].alive:
+                                num_alive += 1
+                    if num_alive < 2:
+                        self.cells[x][y].off(BLACK)
+                    elif num_alive < 4:
+                        self.cells[x][y].on(self.color)
+                    else:
+                        self.cells[x][y].off(BLACK)
+        
+
+    def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
+                    self.quit()
+                if event.key == pygame.K_SPACE:
+                    self.pause = not(self.pause)
 
-        surface.fill(col_grid)
-        cells = update(surface, cells, cellsize)
-        square1 = pygame.draw.rect(surface,(255, 255, 255),(200,150,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(250,150,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(300,150,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(200,200,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(250,200,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(300,200,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(200,250,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(250,250,45,45))
-        pygame.draw.rect(surface,(255, 255, 255),(300,250,45,45))
-        pygame.display.update() 
+            click = pygame.mouse.get_pressed()
+            x, y = pygame.mouse.get_pos()
+            x = int(x / TILESIZE)
+            y = int(y / TILESIZE)
 
-if __name__ == "__main__":
-    main(120, 90, 8)
+            if (click, x, y) != (self.previous_click, self.previous_x, self.previous_y):
+                if click[LEFT] and not self.cells[x][y].alive:
+                    self.cells[x][y].on(self.color)
+                elif click[RIGHT] and self.cells[x][y].alive:
+                    self.cells[x][y].off(BLACK)
+            if event.type == self.next_generation_event and not self.pause:
+                self.next_generation()
+            
+
+
+g = Game()
+while True:
+    g.new()
+    g.run()
