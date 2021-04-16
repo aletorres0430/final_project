@@ -24,18 +24,25 @@ userKillRule1 = [0, 0, 0, 0, 0, 1, 0, 0]
 
 def getRules():
     addingRules = True
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    whiteSquare = pygame.image.load("White-Square.png").convert()
+    whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
+    screen.blit(whiteSquare, (50, 60))
+    pygame.display.flip()
     while addingRules:
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        whiteSquare = pygame.image.load("White-Square.png").convert()
-        whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
-        screen.blit(whiteSquare, (50, 60))
-        pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     addingRules = False
                 if event.key == pygame.K_ESCAPE:
                     self.quit()
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Set the x, y postions of the mouse click
+                x, y = event.pos
+                if whiteSquare.get_rect().collidepoint(x - 50, y - 60):
+                    print('clicked on image')
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
