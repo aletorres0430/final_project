@@ -18,8 +18,9 @@ RIGHT = 2
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-userLiveRule1 = [0, 1, 0, 1, 1, 0, 1, 0]
-userKillRule1 = [0, 1, 0, 0, 1, 0, 1, 0]
+userLiveRule1 = [1, 0, 0, 0, 0, 0, 0, 0]
+userLiveRule2 = [0, 0, 0, 0, 0, 1, 0, 0]
+userKillRule1 = [0, 0, 0, 0, 0, 1, 0, 0]
 
 def getRules():
     addingRules = True
@@ -120,12 +121,10 @@ class Game:
                                 surroundlist.append(0)
                 if surroundlist == userLiveRule1:
                     livegrid.append([x, y])
+                elif surroundlist == userLiveRule2:
+                    livegrid.append([x, y])
                 elif surroundlist == userKillRule1:
                     killgrid.append([x, y])
-                # elif num_alive == 3:
-                #     livegrid.append([x, y])
-                # elif num_alive != 2:
-                #     killgrid.append([x, y])
         for kcoordinate in killgrid:
             self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
         for lcoordinate in livegrid:
