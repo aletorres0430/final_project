@@ -1,6 +1,7 @@
 from itertools import cycle
 
 import pygame
+import time
 
 WIDTH = 1000
 HEIGHT = 750
@@ -20,7 +21,12 @@ WHITE = (255, 255, 255)
 userLiveRule1 = [0, 1, 0, 1, 1, 0, 1, 0]
 userKillRule1 = [0, 1, 0, 0, 1, 0, 1, 0]
 
-
+def getRules():
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    whiteSquare = pygame.image.load("White-Square.png").convert()
+    screen.blit(whiteSquare, (50, 60))
+    pygame.display.flip()
+    time.sleep(5)
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -148,6 +154,7 @@ class Game:
 
 
 g = Game()
+getRules()
 while True:
     g.new()
     g.run()
