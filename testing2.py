@@ -22,11 +22,16 @@ userLiveRule1 = [0, 1, 0, 1, 1, 0, 1, 0]
 userKillRule1 = [0, 1, 0, 0, 1, 0, 1, 0]
 
 def getRules():
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    whiteSquare = pygame.image.load("White-Square.png").convert()
-    screen.blit(whiteSquare, (50, 60))
-    pygame.display.flip()
-    time.sleep(5)
+    addingRules = True
+    while addingRules:
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        whiteSquare = pygame.image.load("White-Square.png").convert()
+        screen.blit(whiteSquare, (50, 60))
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    addingRules = False
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
