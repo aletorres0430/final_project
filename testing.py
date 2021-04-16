@@ -89,14 +89,26 @@ class Game:
 
     #start writing rules here
     def next_generation(self):
-        temp = []
-        for x in range(self.gridwidth):
-            temp.append([])
-            for y in range(self.gridheight):
-                if self.cells[x][y].alive:
-                    self.cells[x][y].off(BLACK)
-                else:
-                    self.cells[x][y].on(self.color)
+        killgrid = []
+        livegrid = []
+        for x in range(self.gridwidth - 1):
+            for y in range(self.gridheight - 1):
+                num_alive = 0
+                for h in range(x-1, x+2):
+                    for v in range(y-1, y+2):
+                        if (x,y) != (h,v):
+                            if self.cells[h][v].alive:
+                                num_alive += 1
+                if num_alive < 1:
+                    killgrid.append([x, y])
+                elif num_alive == 3:
+                    livegrid.append([x, y])
+                elif num_alive != 2:
+                    killgrid.append([x, y])
+        for kcoordinate in killgrid:
+            self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
+        for lcoordinate in livegrid:
+            self.cells[lcoordinate[0]][lcoordinate[1]].on(self.color)
         
 
     def events(self):
