@@ -27,12 +27,15 @@ def getRules():
     while addingRules:
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
         whiteSquare = pygame.image.load("White-Square.png").convert()
+        whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
         screen.blit(whiteSquare, (50, 60))
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     addingRules = False
+                if event.key == pygame.K_ESCAPE:
+                    self.quit()
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -137,7 +140,7 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
+                if event.key == pygame.K_ESCAPE:
                     self.quit()
                 if event.key == pygame.K_SPACE:
                     self.pause = not(self.pause)
