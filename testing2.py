@@ -7,7 +7,7 @@ HEIGHT = 750
 FPS = 60
 TITLE = "Game of Life"
 TILESIZE = 12
-GENERATIONS_PER_SECOND = 1
+GENERATIONS_PER_SECOND = 10
 RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
 
 
@@ -16,6 +16,11 @@ RIGHT = 2
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+
+userLiveRule1 = [0, 1, 0, 1, 1, 0, 1, 0]
+userKillRule1 = [0, 1, 0, 0, 1, 0, 1, 0]
+
+
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -94,17 +99,22 @@ class Game:
         for x in range(self.gridwidth -1):
             for y in range(self.gridheight -1):
                 num_alive = 0
+                surroundlist = []
                 for h in range(x-1, x+2):
                     for v in range(y-1, y+2):
                         if (x,y) != (h,v):
                             if self.cells[h][v].alive:
-                                num_alive += 1
-                if num_alive < 2:
-                    killgrid.append([x, y])
-                elif num_alive == 3:
+                                surroundlist.append(1)
+                            else:
+                                surroundlist.append(0)
+                if surroundlist == userLiveRule1:
                     livegrid.append([x, y])
-                elif num_alive != 2:
+                elif surroundlist == userKillRule1:
                     killgrid.append([x, y])
+                # elif num_alive == 3:
+                #     livegrid.append([x, y])
+                # elif num_alive != 2:
+                #     killgrid.append([x, y])
         for kcoordinate in killgrid:
             self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
         for lcoordinate in livegrid:
