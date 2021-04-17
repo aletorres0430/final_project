@@ -1,7 +1,6 @@
-from itertools import cycle
 
 import pygame
-import time
+
 
 WIDTH = 1000
 HEIGHT = 750
@@ -25,8 +24,9 @@ userKillRule1 = [0, 0, 0, 0, 0, 1, 0, 0]
 def getRules():
     addingRules = True
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    whiteSquare = pygame.image.load("White-Square.png").convert()
+    whiteSquare = pygame.image.load("White-Square.png").convert(24)
     whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
+    whiteSquare.set_alpha(50)
     screen.blit(whiteSquare, (50, 60))
     screen.blit(whiteSquare, (125, 60))
     screen.blit(whiteSquare, (200, 60))
