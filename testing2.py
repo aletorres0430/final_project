@@ -15,6 +15,7 @@ LEFT = 0
 RIGHT = 2
 
 BLACK = (0, 0, 0)
+PBLACK = pygame.Color(0, 0, 0)
 WHITE = (255, 255, 255)
 
 userLiveRule1 = [1, 0, 0, 0, 0, 0, 0, 0]
@@ -25,16 +26,20 @@ def getRules():
     addingRules = True
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     whiteSquare = pygame.image.load("White-Square.png").convert(24)
-    whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
     whiteSquare.set_alpha(50)
-    screen.blit(whiteSquare, (50, 60))
-    screen.blit(whiteSquare, (125, 60))
-    screen.blit(whiteSquare, (200, 60))
+    whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
+    live11 = screen.blit(whiteSquare, (50, 60))
+    live12 = screen.blit(whiteSquare, (125, 60))
+    live13 = screen.blit(whiteSquare, (200, 60))
     screen.blit(whiteSquare, (50, 135))
     screen.blit(whiteSquare, (200, 135))
     screen.blit(whiteSquare, (50, 210))
     screen.blit(whiteSquare, (125, 210))
     screen.blit(whiteSquare, (200, 210))
+
+    l11on = False
+    l12on = False
+    l13on = False
     
     pygame.display.flip()
     while addingRules:
@@ -50,7 +55,45 @@ def getRules():
                 # Set the x, y postions of the mouse click
                 x, y = event.pos
                 if whiteSquare.get_rect().collidepoint(x - 50, y - 60):
-                    print('clicked on image')
+                    if l11on:
+                        screen.fill(BLACK, live11)
+                        live11 = screen.blit(whiteSquare, (50, 60))
+                        pygame.display.flip()
+                        l11on = False
+                    else:
+                        screen.fill(BLACK, live11)
+                        whiteSquare.set_alpha(200)
+                        live11 = screen.blit(whiteSquare, (50, 60))
+                        pygame.display.flip()
+                        whiteSquare.set_alpha(50)
+                        l11on = True
+                elif whiteSquare.get_rect().collidepoint(x - 125, y - 60):
+                    if l12on:
+                        screen.fill(BLACK, live12)
+                        live12 = screen.blit(whiteSquare, (125, 60))
+                        pygame.display.flip()
+                        l12on = False
+                    else:
+                        screen.fill(BLACK, live12)
+                        whiteSquare.set_alpha(200)
+                        live12 = screen.blit(whiteSquare, (125, 60))
+                        pygame.display.flip()
+                        whiteSquare.set_alpha(50)
+                        l12on = True
+                elif whiteSquare.get_rect().collidepoint(x - 200, y - 60):
+                    if l13on:
+                        screen.fill(BLACK, live13)
+                        live13 = screen.blit(whiteSquare, (200, 60))
+                        pygame.display.flip()
+                        l13on = False
+                    else:
+                        screen.fill(BLACK, live13)
+                        whiteSquare.set_alpha(200)
+                        live13 = screen.blit(whiteSquare, (200, 60))
+                        pygame.display.flip()
+                        whiteSquare.set_alpha(50)
+                        l13on = True
+
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
