@@ -18,9 +18,9 @@ BLACK = (0, 0, 0)
 PBLACK = pygame.Color(0, 0, 0)
 WHITE = (255, 255, 255)
 
-userLiveRule1 = [1, 0, 0, 0, 0, 0, 0, 0]
-userLiveRule2 = [0, 0, 0, 0, 0, 1, 0, 0]
-userKillRule1 = [0, 0, 0, 0, 0, 1, 0, 0]
+userLiveRule1 = [0, 0, 0, 0, 0, 0, 0, 0]
+# userLiveRule2 = [0, 0, 0, 0, 0, 1, 0, 0]
+# userKillRule1 = [0, 0, 0, 0, 0, 1, 0, 0]
 
 def getRules():
     addingRules = True
@@ -28,18 +28,17 @@ def getRules():
     whiteSquare = pygame.image.load("White-Square.png").convert(24)
     whiteSquare.set_alpha(50)
     whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
-    live11 = screen.blit(whiteSquare, (50, 60))
-    live12 = screen.blit(whiteSquare, (125, 60))
-    live13 = screen.blit(whiteSquare, (200, 60))
-    screen.blit(whiteSquare, (50, 135))
-    screen.blit(whiteSquare, (200, 135))
-    screen.blit(whiteSquare, (50, 210))
-    screen.blit(whiteSquare, (125, 210))
-    screen.blit(whiteSquare, (200, 210))
+    grid1coords = [(50, 60), (50, 135), (50, 210), (125, 60), (125, 210), (200, 60), (200, 135), (200, 210)]
+    live11 = screen.blit(whiteSquare, grid1coords[0])
+    live12 = screen.blit(whiteSquare, grid1coords[1])
+    live13 = screen.blit(whiteSquare, grid1coords[2])
+    live14 = screen.blit(whiteSquare, grid1coords[3])
+    live15 = screen.blit(whiteSquare, grid1coords[4])
+    live16 = screen.blit(whiteSquare, grid1coords[5])
+    live17 = screen.blit(whiteSquare, grid1coords[6])
+    live18 = screen.blit(whiteSquare, grid1coords[7])
+    live1rects = [live11, live12, live13, live14, live15, live16, live17, live18]
 
-    l11on = False
-    l12on = False
-    l13on = False
     
     pygame.display.flip()
     while addingRules:
@@ -54,45 +53,61 @@ def getRules():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Set the x, y postions of the mouse click
                 x, y = event.pos
-                if whiteSquare.get_rect().collidepoint(x - 50, y - 60):
-                    if l11on:
-                        screen.fill(BLACK, live11)
-                        live11 = screen.blit(whiteSquare, (50, 60))
-                        pygame.display.flip()
-                        l11on = False
-                    else:
-                        screen.fill(BLACK, live11)
-                        whiteSquare.set_alpha(200)
-                        live11 = screen.blit(whiteSquare, (50, 60))
-                        pygame.display.flip()
-                        whiteSquare.set_alpha(50)
-                        l11on = True
-                elif whiteSquare.get_rect().collidepoint(x - 125, y - 60):
-                    if l12on:
-                        screen.fill(BLACK, live12)
-                        live12 = screen.blit(whiteSquare, (125, 60))
-                        pygame.display.flip()
-                        l12on = False
-                    else:
-                        screen.fill(BLACK, live12)
-                        whiteSquare.set_alpha(200)
-                        live12 = screen.blit(whiteSquare, (125, 60))
-                        pygame.display.flip()
-                        whiteSquare.set_alpha(50)
-                        l12on = True
-                elif whiteSquare.get_rect().collidepoint(x - 200, y - 60):
-                    if l13on:
-                        screen.fill(BLACK, live13)
-                        live13 = screen.blit(whiteSquare, (200, 60))
-                        pygame.display.flip()
-                        l13on = False
-                    else:
-                        screen.fill(BLACK, live13)
-                        whiteSquare.set_alpha(200)
-                        live13 = screen.blit(whiteSquare, (200, 60))
-                        pygame.display.flip()
-                        whiteSquare.set_alpha(50)
-                        l13on = True
+                coordnumber = 0
+                for coords in grid1coords:
+                    if whiteSquare.get_rect().collidepoint(x - coords[0], y - coords[1]):
+                        if userLiveRule1[coordnumber] == 1:
+                            userLiveRule1[coordnumber] = 0
+                            screen.fill(BLACK, live1rects[coordnumber])
+                            live1rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                        else:
+                            userLiveRule1[coordnumber] = 1
+                            screen.fill(BLACK, live1rects[coordnumber])
+                            whiteSquare.set_alpha(200)
+                            live1rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                            whiteSquare.set_alpha(50)
+                    coordnumber += 1
+                # if whiteSquare.get_rect().collidepoint(x - 50, y - 60):
+                #     if l11on:
+                #         screen.fill(BLACK, live11)
+                #         live11 = screen.blit(whiteSquare, (50, 60))
+                #         pygame.display.flip()
+                #         l11on = False
+                #     else:
+                #         screen.fill(BLACK, live11)
+                #         whiteSquare.set_alpha(200)
+                #         live11 = screen.blit(whiteSquare, (50, 60))
+                #         pygame.display.flip()
+                #         whiteSquare.set_alpha(50)
+                #         l11on = True
+                # elif whiteSquare.get_rect().collidepoint(x - 125, y - 60):
+                #     if l12on:
+                #         screen.fill(BLACK, live12)
+                #         live12 = screen.blit(whiteSquare, (125, 60))
+                #         pygame.display.flip()
+                #         l12on = False
+                #     else:
+                #         screen.fill(BLACK, live12)
+                #         whiteSquare.set_alpha(200)
+                #         live12 = screen.blit(whiteSquare, (125, 60))
+                #         pygame.display.flip()
+                #         whiteSquare.set_alpha(50)
+                #         l12on = True
+                # elif whiteSquare.get_rect().collidepoint(x - 200, y - 60):
+                #     if l13on:
+                #         screen.fill(BLACK, live13)
+                #         live13 = screen.blit(whiteSquare, (200, 60))
+                #         pygame.display.flip()
+                #         l13on = False
+                #     else:
+                #         screen.fill(BLACK, live13)
+                #         whiteSquare.set_alpha(200)
+                #         live13 = screen.blit(whiteSquare, (200, 60))
+                #         pygame.display.flip()
+                #         whiteSquare.set_alpha(50)
+                #         l13on = True
 
 
 class Cell(pygame.sprite.Sprite):
@@ -182,12 +197,12 @@ class Game:
                                 surroundlist.append(0)
                 if surroundlist == userLiveRule1:
                     livegrid.append([x, y])
-                elif surroundlist == userLiveRule2:
-                    livegrid.append([x, y])
-                elif surroundlist == userKillRule1:
-                    killgrid.append([x, y])
-        for kcoordinate in killgrid:
-            self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
+                # elif surroundlist == userLiveRule2:
+                #     livegrid.append([x, y])
+                # elif surroundlist == userKillRule1:
+                #     killgrid.append([x, y])
+        # for kcoordinate in killgrid:
+        #     self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
         for lcoordinate in livegrid:
             self.cells[lcoordinate[0]][lcoordinate[1]].on(self.color)
         
