@@ -28,6 +28,14 @@ def getRules():
     whiteSquare = pygame.image.load("White-Square.png").convert()
     whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
     screen.blit(whiteSquare, (50, 60))
+    screen.blit(whiteSquare, (125, 60))
+    screen.blit(whiteSquare, (200, 60))
+    screen.blit(whiteSquare, (50, 135))
+    screen.blit(whiteSquare, (200, 135))
+    screen.blit(whiteSquare, (50, 210))
+    screen.blit(whiteSquare, (125, 210))
+    screen.blit(whiteSquare, (200, 210))
+    
     pygame.display.flip()
     while addingRules:
         for event in pygame.event.get():
