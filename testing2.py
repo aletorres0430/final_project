@@ -144,7 +144,7 @@ def getRules():
                             kill1rects[coordnumber] = screen.blit(whiteSquare, coords)
                             pygame.display.flip()
                         else:
-                            userLiveRule3[coordnumber] = 1
+                            userKillRule1[coordnumber] = 1
                             screen.fill(BLACK, kill1rects[coordnumber])
                             whiteSquare.set_alpha(200)
                             kill1rects[coordnumber] = screen.blit(whiteSquare, coords)
