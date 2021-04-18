@@ -139,7 +139,7 @@ def getRules():
                 for coords in kill1coords:
                     if whiteSquare.get_rect().collidepoint(x - coords[0], y - coords[1]):
                         if userKillRule1[coordnumber] == 1:
-                            userLiveRule3[coordnumber] = 0
+                            userKillRule1[coordnumber] = 0
                             screen.fill(BLACK, kill1rects[coordnumber])
                             kill1rects[coordnumber] = screen.blit(whiteSquare, coords)
                             pygame.display.flip()
