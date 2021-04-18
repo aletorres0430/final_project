@@ -20,6 +20,7 @@ WHITE = (255, 255, 255)
 
 userLiveRule1 = [0, 0, 0, 0, 0, 0, 0, 0]
 userLiveRule2 = [0, 0, 0, 0, 0, 0, 0, 0]
+userLiveRule3 = [0, 0, 0, 0, 0, 0, 0, 0]
 # userKillRule1 = [0, 0, 0, 0, 0, 1, 0, 0]
 
 def getRules():
@@ -50,6 +51,17 @@ def getRules():
     live27 = screen.blit(whiteSquare, grid2coords[6])
     live28 = screen.blit(whiteSquare, grid2coords[7])
     live2rects = [live21, live22, live23, live24, live25, live26, live27, live28]
+
+    grid3coords = [(650, 60), (650, 135), (650, 210), (725, 60), (725, 210), (800, 60), (800, 135), (800, 210)]
+    live31 = screen.blit(whiteSquare, grid3coords[0])
+    live32 = screen.blit(whiteSquare, grid3coords[1])
+    live33 = screen.blit(whiteSquare, grid3coords[2])
+    live34 = screen.blit(whiteSquare, grid3coords[3])
+    live35 = screen.blit(whiteSquare, grid3coords[4])
+    live36 = screen.blit(whiteSquare, grid3coords[5])
+    live37 = screen.blit(whiteSquare, grid3coords[6])
+    live38 = screen.blit(whiteSquare, grid3coords[7])
+    live3rects = [live31, live32, live33, live34, live35, live36, live37, live38]
 
     pygame.display.flip()
     while addingRules:
@@ -93,6 +105,22 @@ def getRules():
                             screen.fill(BLACK, live2rects[coordnumber])
                             whiteSquare.set_alpha(200)
                             live2rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                            whiteSquare.set_alpha(50)
+                    coordnumber += 1
+                coordnumber = 0
+                for coords in grid3coords:
+                    if whiteSquare.get_rect().collidepoint(x - coords[0], y - coords[1]):
+                        if userLiveRule3[coordnumber] == 1:
+                            userLiveRule3[coordnumber] = 0
+                            screen.fill(BLACK, live3rects[coordnumber])
+                            live3rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                        else:
+                            userLiveRule3[coordnumber] = 1
+                            screen.fill(BLACK, live3rects[coordnumber])
+                            whiteSquare.set_alpha(200)
+                            live3rects[coordnumber] = screen.blit(whiteSquare, coords)
                             pygame.display.flip()
                             whiteSquare.set_alpha(50)
                     coordnumber += 1
@@ -225,6 +253,8 @@ class Game:
                 if surroundlist == userLiveRule1:
                     livegrid.append([x, y])
                 elif surroundlist == userLiveRule2:
+                    livegrid.append([x, y])
+                elif surroundlist == userLiveRule3:
                     livegrid.append([x, y])
                 # elif surroundlist == userKillRule1:
                 #     killgrid.append([x, y])
