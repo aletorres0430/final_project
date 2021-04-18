@@ -1,15 +1,11 @@
-
 import pygame
 
-
+TITLE = "Game of Life"
 WIDTH = 1000
 HEIGHT = 750
 FPS = 60
-TITLE = "Game of Life"
 TILESIZE = 12
 GENERATIONS_PER_SECOND = 10
-RANDOM_CHANCE_TO_ALIVE_CELL = 0.25
-
 
 LEFT = 0
 RIGHT = 2
@@ -22,6 +18,8 @@ userLiveRule1 = [0, 0, 0, 0, 0, 0, 0, 0]
 userLiveRule2 = [0, 0, 0, 0, 0, 0, 0, 0]
 userLiveRule3 = [0, 0, 0, 0, 0, 0, 0, 0]
 userKillRule1 = [0, 0, 0, 0, 0, 0, 0, 0]
+userKillRule2 = [0, 0, 0, 0, 0, 0, 0, 0]
+userKillRule3 = [0, 0, 0, 0, 0, 0, 0, 0]
 
 def getRules():
     addingRules = True
@@ -73,6 +71,28 @@ def getRules():
     kill17 = screen.blit(whiteSquare, kill1coords[6])
     kill18 = screen.blit(whiteSquare, kill1coords[7])
     kill1rects = [kill11, kill12, kill13, kill14, kill15, kill16, kill17, kill18]
+
+    kill2coords = [(350, 460), (350, 535), (350, 610), (425, 460), (425, 610), (500, 460), (500, 535), (500, 610)]
+    kill21 = screen.blit(whiteSquare, kill2coords[0])
+    kill22 = screen.blit(whiteSquare, kill2coords[1])
+    kill23 = screen.blit(whiteSquare, kill2coords[2])
+    kill24 = screen.blit(whiteSquare, kill2coords[3])
+    kill25 = screen.blit(whiteSquare, kill2coords[4])
+    kill26 = screen.blit(whiteSquare, kill2coords[5])
+    kill27 = screen.blit(whiteSquare, kill2coords[6])
+    kill28 = screen.blit(whiteSquare, kill2coords[7])
+    kill2rects = [kill21, kill22, kill23, kill24, kill25, kill26, kill27, kill28]
+
+    kill3coords = [(650, 460), (650, 535), (650, 610), (725, 460), (725, 610), (800, 460), (800, 535), (800, 610)]
+    kill31 = screen.blit(whiteSquare, kill3coords[0])
+    kill32 = screen.blit(whiteSquare, kill3coords[1])
+    kill33 = screen.blit(whiteSquare, kill3coords[2])
+    kill34 = screen.blit(whiteSquare, kill3coords[3])
+    kill35 = screen.blit(whiteSquare, kill3coords[4])
+    kill36 = screen.blit(whiteSquare, kill3coords[5])
+    kill37 = screen.blit(whiteSquare, kill3coords[6])
+    kill38 = screen.blit(whiteSquare, kill3coords[7])
+    kill3rects = [kill31, kill32, kill33, kill34, kill35, kill36, kill37, kill38]
 
     pygame.display.flip()
     while addingRules:
@@ -151,6 +171,39 @@ def getRules():
                             pygame.display.flip()
                             whiteSquare.set_alpha(50)
                     coordnumber += 1
+                coordnumber = 0
+                for coords in kill2coords:
+                    if whiteSquare.get_rect().collidepoint(x - coords[0], y - coords[1]):
+                        if userKillRule2[coordnumber] == 1:
+                            userKillRule2[coordnumber] = 0
+                            screen.fill(BLACK, kill2rects[coordnumber])
+                            kill2rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                        else:
+                            userKillRule2[coordnumber] = 1
+                            screen.fill(BLACK, kill2rects[coordnumber])
+                            whiteSquare.set_alpha(200)
+                            kill2rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                            whiteSquare.set_alpha(50)
+                    coordnumber += 1
+                coordnumber = 0
+                for coords in kill3coords:
+                    if whiteSquare.get_rect().collidepoint(x - coords[0], y - coords[1]):
+                        if userKillRule3[coordnumber] == 1:
+                            userKillRule3[coordnumber] = 0
+                            screen.fill(BLACK, kill3rects[coordnumber])
+                            kill3rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                        else:
+                            userKillRule3[coordnumber] = 1
+                            screen.fill(BLACK, kill3rects[coordnumber])
+                            whiteSquare.set_alpha(200)
+                            kill3rects[coordnumber] = screen.blit(whiteSquare, coords)
+                            pygame.display.flip()
+                            whiteSquare.set_alpha(50)
+                    coordnumber += 1
+
                 # if whiteSquare.get_rect().collidepoint(x - 50, y - 60):
                 #     if l11on:
                 #         screen.fill(BLACK, live11)
@@ -285,13 +338,15 @@ class Game:
                     livegrid.append([x, y])
                 elif surroundlist == userKillRule1:
                     killgrid.append([x, y])
+                elif surroundlist == userKillRule2:
+                    killgrid.append([x, y])
+                elif surroundlist == userKillRule3:
+                    killgrid.append([x, y])
         for kcoordinate in killgrid:
             self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
         for lcoordinate in livegrid:
             self.cells[lcoordinate[0]][lcoordinate[1]].on(self.color)
         
-        
-
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
