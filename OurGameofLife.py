@@ -1,4 +1,5 @@
 import pygame
+import random
 
 TITLE = "Game of Life"
 WIDTH = 1000
@@ -204,47 +205,6 @@ def getRules():
                             whiteSquare.set_alpha(50)
                     coordnumber += 1
 
-                # if whiteSquare.get_rect().collidepoint(x - 50, y - 60):
-                #     if l11on:
-                #         screen.fill(BLACK, live11)
-                #         live11 = screen.blit(whiteSquare, (50, 60))
-                #         pygame.display.flip()
-                #         l11on = False
-                #     else:
-                #         screen.fill(BLACK, live11)
-                #         whiteSquare.set_alpha(200)
-                #         live11 = screen.blit(whiteSquare, (50, 60))
-                #         pygame.display.flip()
-                #         whiteSquare.set_alpha(50)
-                #         l11on = True
-                # elif whiteSquare.get_rect().collidepoint(x - 125, y - 60):
-                #     if l12on:
-                #         screen.fill(BLACK, live12)
-                #         live12 = screen.blit(whiteSquare, (125, 60))
-                #         pygame.display.flip()
-                #         l12on = False
-                #     else:
-                #         screen.fill(BLACK, live12)
-                #         whiteSquare.set_alpha(200)
-                #         live12 = screen.blit(whiteSquare, (125, 60))
-                #         pygame.display.flip()
-                #         whiteSquare.set_alpha(50)
-                #         l12on = True
-                # elif whiteSquare.get_rect().collidepoint(x - 200, y - 60):
-                #     if l13on:
-                #         screen.fill(BLACK, live13)
-                #         live13 = screen.blit(whiteSquare, (200, 60))
-                #         pygame.display.flip()
-                #         l13on = False
-                #     else:
-                #         screen.fill(BLACK, live13)
-                #         whiteSquare.set_alpha(200)
-                #         live13 = screen.blit(whiteSquare, (200, 60))
-                #         pygame.display.flip()
-                #         whiteSquare.set_alpha(50)
-                #         l13on = True
-
-
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
@@ -290,6 +250,14 @@ class Game:
         if self.show_grid:
             self.draw_grid()
         pygame.display.flip()
+
+    def random_grid(self):
+        for x in range(self.gridwidth):
+            for y in range(self.gridheight):
+                if random.random() < .25:
+                    self.cells[x][y].on(self.color)
+                else:
+                    self.cells[x][y].off()
     
     def new(self):
         self.gridwidth = int(WIDTH / TILESIZE)
@@ -356,6 +324,8 @@ class Game:
                     self.quit()
                 if event.key == pygame.K_SPACE:
                     self.pause = not(self.pause)
+                if event.key == pygame.K_r:
+                    self.random_grid()
 
             click = pygame.mouse.get_pressed()
             x, y = pygame.mouse.get_pos()
@@ -369,8 +339,6 @@ class Game:
                     self.cells[x][y].off(BLACK)
             if event.type == self.next_generation_event and not self.pause:
                 self.next_generation()
-            
-
 
 g = Game()
 getRules()
