@@ -12,7 +12,6 @@ LEFT = 0
 RIGHT = 2
 
 BLACK = (0, 0, 0)
-PBLACK = pygame.Color(0, 0, 0)
 WHITE = (255, 255, 255)
 
 userLiveRule1 = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -28,6 +27,7 @@ def getRules():
     whiteSquare = pygame.image.load("White-Square.png").convert(24)
     whiteSquare.set_alpha(50)
     whiteSquare = pygame.transform.scale(whiteSquare, (50, 50))
+    smallSquare = pygame.transform.scale(whiteSquare, (24, 24))
 
     live1coords = [(50, 60), (50, 135), (50, 210), (125, 60), (125, 210), (200, 60), (200, 135), (200, 210)]
     live11 = screen.blit(whiteSquare, live1coords[0])
@@ -94,6 +94,21 @@ def getRules():
     kill37 = screen.blit(whiteSquare, kill3coords[6])
     kill38 = screen.blit(whiteSquare, kill3coords[7])
     kill3rects = [kill31, kill32, kill33, kill34, kill35, kill36, kill37, kill38]
+
+    grid1button = screen.blit(smallSquare, (138,300))
+    grid2button = screen.blit(smallSquare, (438,300))
+    grid3button = screen.blit(smallSquare, (738,300))
+    grid4button = screen.blit(smallSquare, (138,700))
+    grid5button = screen.blit(smallSquare, (438,700))
+    grid6button = screen.blit(smallSquare, (738,700))
+
+    global grid1on, grid2on, grid3on, grid4on, grid5on, grid6on
+    grid1on = False
+    grid2on = False
+    grid3on = False
+    grid4on = False
+    grid5on = False
+    grid6on = False
 
     pygame.display.flip()
     while addingRules:
@@ -204,6 +219,84 @@ def getRules():
                             pygame.display.flip()
                             whiteSquare.set_alpha(50)
                     coordnumber += 1
+                if grid1button.collidepoint(x, y):
+                    if grid1on:
+                        grid1on = False
+                        screen.fill(BLACK, grid1button)
+                        grid1button = screen.blit(smallSquare, (138,300))
+                        pygame.display.flip()
+                    else:
+                        grid1on = True
+                        screen.fill(BLACK, grid1button)
+                        smallSquare.set_alpha(200)
+                        grid1button = screen.blit(smallSquare, (138,300))
+                        pygame.display.flip()
+                        smallSquare.set_alpha(50)
+                if grid2button.collidepoint(x, y):
+                    if grid2on:
+                        grid2on = False
+                        screen.fill(BLACK, grid2button)
+                        grid2button = screen.blit(smallSquare, (438,300))
+                        pygame.display.flip()
+                    else:
+                        grid2on = True
+                        screen.fill(BLACK, grid2button)
+                        smallSquare.set_alpha(200)
+                        grid2button = screen.blit(smallSquare, (438,300))
+                        pygame.display.flip()
+                        smallSquare.set_alpha(50)
+                if grid3button.collidepoint(x, y):
+                    if grid3on:
+                        grid3on = False
+                        screen.fill(BLACK, grid3button)
+                        grid3button = screen.blit(smallSquare, (738,300))
+                        pygame.display.flip()
+                    else:
+                        grid3on = True
+                        screen.fill(BLACK, grid3button)
+                        smallSquare.set_alpha(200)
+                        grid3button = screen.blit(smallSquare, (738,300))
+                        pygame.display.flip()
+                        smallSquare.set_alpha(50)
+                if grid4button.collidepoint(x, y):
+                    if grid4on:
+                        grid4on = False
+                        screen.fill(BLACK, grid4button)
+                        grid4button = screen.blit(smallSquare, (138,700))
+                        pygame.display.flip()
+                    else:
+                        grid4on = True
+                        screen.fill(BLACK, grid4button)
+                        smallSquare.set_alpha(200)
+                        grid4button = screen.blit(smallSquare, (138,700))
+                        pygame.display.flip()
+                        smallSquare.set_alpha(50)
+                if grid5button.collidepoint(x, y):
+                    if grid5on:
+                        grid5on = False
+                        screen.fill(BLACK, grid5button)
+                        grid5button = screen.blit(smallSquare, (438,700))
+                        pygame.display.flip()
+                    else:
+                        grid5on = True
+                        screen.fill(BLACK, grid5button)
+                        smallSquare.set_alpha(200)
+                        grid5button = screen.blit(smallSquare, (438,700))
+                        pygame.display.flip()
+                        smallSquare.set_alpha(50)
+                if grid6button.collidepoint(x, y):
+                    if grid6on:
+                        grid6on = False
+                        screen.fill(BLACK, grid6button)
+                        grid6button = screen.blit(smallSquare, (738,700))
+                        pygame.display.flip()
+                    else:
+                        grid6on = True
+                        screen.fill(BLACK, grid6button)
+                        smallSquare.set_alpha(200)
+                        grid6button = screen.blit(smallSquare, (738,700))
+                        pygame.display.flip()
+                        smallSquare.set_alpha(50)
 
 class Cell(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -298,17 +391,17 @@ class Game:
                                 surroundlist.append(1)
                             else:
                                 surroundlist.append(0)
-                if surroundlist == userLiveRule1:
+                if surroundlist == userLiveRule1 and grid1on:
                     livegrid.append([x, y])
-                elif surroundlist == userLiveRule2:
+                elif surroundlist == userLiveRule2 and grid2on:
                     livegrid.append([x, y])
-                elif surroundlist == userLiveRule3:
+                elif surroundlist == userLiveRule3 and grid3on:
                     livegrid.append([x, y])
-                elif surroundlist == userKillRule1:
+                elif surroundlist == userKillRule1 and grid4on:
                     killgrid.append([x, y])
-                elif surroundlist == userKillRule2:
+                elif surroundlist == userKillRule2 and grid5on:
                     killgrid.append([x, y])
-                elif surroundlist == userKillRule3:
+                elif surroundlist == userKillRule3 and grid6on:
                     killgrid.append([x, y])
         for kcoordinate in killgrid:
             self.cells[kcoordinate[0]][kcoordinate[1]].off(BLACK)
