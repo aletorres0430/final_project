@@ -11,12 +11,15 @@ NormalGameofLife.py runs the regular Conway's Game of Life
 - pressing the R key will randomize the grid so that 25% of cells are on
 - randomizing can be done at any point in the simulation, even while its running
 
-OutGameofLife.py allows the user to input custom rules to make their own Game of Life
-- 6 3x3 grids are displayed: 3 on top and 3 on bottom, each with a small square underneath
+OurGameofLife.py allows the user to input custom rules to make their own Game of Life
+- First, 6 3x3 grids are displayed: 3 on top and 3 on bottom, each with a small square underneath
 - clicking on any of the shown squares will turn it on or off
-- The top three grids are live grids
-- Unlike Conway's Game of Life rules, the cells do not turn off or on based on the number of alive cells in their surrounding. Instead, if the surrou
-- 
-- The top three grids are used to create custom live rules and the bottom three are used to create kill rules
-- 
+- The top three grids are "live grids" and the bottom three are "kill grids"
+- The simulation will follow these rules instead of the regular Game of Live rules:
+    - If the surroundings of a cell match any of the live grids, it will be turned on next generation
+    - If the surroundings of a cell match any of the kill grids, it will be turned off the next generation
+    - If the surroundings of a cell don't match any of the rule grids, it will stay the same
+- The little square under each rule grid is an on/off switch that will turn the corresponding active or inactive (only rule grids that are active will affect the simulation. this allows users to select how many rules they want)
+- Press Spacebar when you have finished inputing the rules to move on to the grid
+- The same instructions used in NormalGameofLife.py above apply here
 
